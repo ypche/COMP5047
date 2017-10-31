@@ -11,7 +11,9 @@
     </div>
   </div>
   <div class="col-md-8 mt-3 text-center">
+    {% if Notification %}
     <label class="alert alert-warning">{{ Notification }}</label>
+    {% endif %}
   </div>
   <div id="chartContainer" class="col-md-12 text-center mt-3"></div>
 </div>
