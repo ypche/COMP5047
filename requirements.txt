@@ -1,0 +1,8 @@
+csv2json==0.2
+Django==1.10
+djangorestframework==3.7.1
+PyMySQL==0.7.11
+pyserial==3.4
+pytz==2017.2
+restframework-serializer-factory==0.6.0
+virtualenv==15.1.0
