@@ -27,24 +27,89 @@ class MyHomeListView(ListView):
     # login_url = '/auth/login/'
 
     def get_queryset(self):
-        from datetime import datetime
-        from django.db.models import Avg
-        alldata = Seneor.objects.all()
-        #    alldata = Seneor.objects.filter(time__day=datetime.today().day)
-        result = alldata.extra({'hour': 'HOUR(time)'}).values('hour') \
-            .annotate(Avg('Uvalue'))
+        daydata = Seneor.objects.all().order_by('-time')[:240]
+        mark_data = Seneor.objects.all().order_by('-time')[:5]
         data = []
-        for _ in result:
-            json_data = {
-                'date': _['hour'],
-                'close': _['Uvalue__avg']
-            }
-            data.insert(0, json_data)
-        data.sort(key=lambda x: (x.get('date'), 0))
-        with open('myhome/static/json/uv_data.json', 'w') as outfile:
+        category = []
+        tdata = []
+        hdata = []
+        # for _ in alldata:
+        #     json_data = {
+        #         "id": _.id,
+        #         "Tvalue":_.Tvalue
+        #     }
+        #
+        #     data.insert(0,json_data)
+        #
+        # print(data)
+        count = 1
+        average_tvalue = 0
+        average_hvalue = 0
+        total_tvalue = 0
+        total_tval = 0
+        total_hvalue = 0
+        total_hval = 0
+        time_hour = 1
+        for _ in daydata:
+            compare_data = Seneor.objects.all().order_by('-time')[:5]
+            if compare_data == mark_data:
+                break
+            else:
+                total_tval = total_tval + _.Tvalue
+                total_hval = total_hval + _.Hvalue
+                if count % 10!=0:
+                    total_tvalue = total_tvalue + _.Tvalue
+                    total_hvalue = total_hvalue + _.Hvalue
+                    count = count + 1
+
+                else:
+                    count = 1
+                    average_tvalue = total_tvalue/10
+                    average_hvalue = total_hvalue/10
+                    json_category = {
+                        "label": str(time_hour)
+                    }
+                    json_tdata = {
+                        "value": str(round(average_tvalue, 3))
+                    }
+                    json_hdata = {
+                        "value": str(round(average_hvalue, 3))
+                    }
+                    json_data = {
+                        "label": str(time_hour),
+                        "value": str(round(average_tvalue, 3)),
+                    }
+
+                    # data.insert(0, json_data)
+                    category.insert(0, json_category)
+                    tdata.insert(0, json_tdata)
+                    hdata.insert(0, json_hdata)
+                    time_hour = time_hour + 1
+                    total_tvalue = 0
+                    total_hvalue = 0
+
+        json_data = {
+            "label": category,
+            "tdata": tdata,
+            "hdata": hdata
+        }
+        data.insert(0, json_data)
+
+        with open('static/json/data.json', 'w') as outfile:
             json.dump(data, outfile)
-        result = Notification.objects.values()
-        return result
+        with open('static/json/category.json', 'w') as outfile:
+            json.dump(category, outfile)
+        with open('static/json/tdata.json', 'w') as outfile:
+            json.dump(tdata, outfile)
+        with open('static/json/hdata.json', 'w') as outfile:
+            json.dump(hdata, outfile)
+
+        if total_tval / 60 > 30:
+            Notification = "Warning: Today's temperature in your environment was too high."
+            return Notification
+        else:
+            Notification = "Cool, the temperature in past 24 hours was perfect! ."
+            return Notification
     
 
 class IndexView(TemplateView):

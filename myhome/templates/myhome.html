@@ -51,86 +51,68 @@
 			</form>
 		</div>
 		<br>
-		<div class="col-md-12 text-center">
-			<p class="showUVContainer"></p>
-			<script src="http://d3js.org/d3.v3.min.js"></script>
-		</div>
+		<div id="chartContainer" class="col-md-12 text-center mt-3"></div>
 	</div>
 </div>
 {% endblock %}
 
 {% block script %}
-var label = d3.select(".showUVContainer");
+FusionCharts.ready(function(){
+  var endpoint = "../../api/Data/history/";
 
-var	margin = {top: 50, right: 20, bottom: 30, left: 50};
+  $.ajax({
+    method: "GET",
+    url: endpoint,
 
-var width = 600;
-var height = 360;
-var	x = d3.scale.linear().range([0, width]);
-var	y = d3.scale.linear().range([height, 0]);
+    success: function(data) {
+			console.log(data);
+			var t = $.parseJSON(JSON.stringify(data));
+			var category = t[0]['label'];
+			var tdata = t[0]['tdata'];
+			var hdata = t[0]['hdata'];
+			var revenueChart = new FusionCharts({
+        "type": "mscombidy2d",
+        "renderAt": "chartContainer",
+        "dataFormat": "json",
+        "width": 1200,
+        "height": 500,
+        "dataSource": {
+					"chart": {
+							"caption": "Temperature and Humidity",
+							"xAxisname": "Hours from now",
+							"pYAxisName": "Temperature °C",
+							"sYAxisName": "Humidity %",
+							"numberSuffix": "°C",
+							"sNumberSuffix" : "%",
+							"setadaptiveymin": "1",
+							"setadaptivesymin": "1",
+							"linethickness": "5",
+							"showborder": "0"
+					},
+					"categories": [
+							{
+									"category": category
+							}
+					],
+					"dataset": [
+							{
+									"seriesname": "Temperature",
+									"parentyaxis": "P",
+									"renderas": "Line",
+									"data": tdata
+							},
+							{
+									"parentyaxis": "S",
+									"seriesname": "Humidity",
+									"renderas": "Line",
+									"data": hdata
+							},
+					]
+        }
+      });
 
-var	xAxis = d3.svg.axis().scale(x)
-	.orient("bottom").ticks(24);
-
-var	yAxis = d3.svg.axis().scale(y)
-	.orient("left").ticks(5);
-
-var	valueline = d3.svg.line()
-	.x(function(d) { return x(d.date); })
-	.y(function(d) { return y(d.close); });
-
-var	svg = d3.select('.showUVContainer')
-	.append("svg")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
-	  .append("g")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-d3.json("/static/json/uv_data.json", function(error, data) {
-	data.forEach(function(d) {
-		d.date = +d.date
-		d.close = +d.close;
-	});
-
-	x.domain(d3.extent(data, function(d) { return d.date; }));
-	y.domain([0, d3.max(data, function(d) { return d.close; })]);
-
-	svg.append("path")
-		.attr("class", "line")
-		.attr("d", valueline(data));
-
-	svg.selectAll("circle")
-		.data(data)
-		.enter()
-		.append("circle")
-		.attr("r", 10)
-	  .attr("cx", function(d) {
-	    return x(d.date)
-	  })
-	  .attr("cy", function(d) {
-	    return y(d.close)
-	  });
-
-
-
-	svg.append("g")			// Add the X Axis
-		.attr("class", "x axis")
-		.attr("transform", "translate(0," + height + ")")
-    .call(xAxis)
-    .append("text")
-    .text('Hour')
-    .attr('text-anchor', 'right')
-    .attr('dx', '1em')
-
-	svg.append("g")			// Add the Y Axis
-		.attr("class", "y axis")
-		.call(yAxis)
-    .append("text")
-    .text('UV(hourly AVG)')
-    .attr('text-anchor', 'end')
-    .attr('dx', '4em')
-    .attr('dy', '-2em')
-    // .attr('transform', 'rotate(90)')
-
-});
+      revenueChart.render();
+    }
+  });
+})
 {% endblock %}
