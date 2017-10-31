@@ -21,19 +21,18 @@
 {% endblock %}
 
 {% block main %}
-<div id="chartContainer" class="col-xs-8" style="padding: 5px;">
-
-</div>
-
-<div class="col-xs-4">
-  <div class="btn-group" role="group" aria-label="...">
-    <a type="button" class="btn btn-default" href="{% url 'myhome:historyofTvalue' %}">Day</a>
-    <a type="button" class="btn btn-default" href="{% url 'myhome:week_Tvalue' %}">Week</a>
+<div class="row">
+  <div class="col-md-4 mt-3 text-center">
+    <div class="btn-group" role="group" aria-label="...">
+      <a type="button" class="btn btn-default" href="{% url 'myhome:historyofTvalue' %}">Day</a>
+      <a type="button" class="btn btn-default" href="{% url 'myhome:week_Tvalue' %}">Week</a>
+    </div>
   </div>
-  <img src="/static/image/advice.png" height="150" width="200">
-  <textarea cols="50" rows="10" wrap="hard" readonly="yes">{{ Notification }} </textarea>
+  <div class="col-md-8 mt-3 text-center">
+    <label class="alert alert-warning">{{ Notification }}</label>
+  </div>
+  <div id="chartContainer" class="col-md-12 text-center mt-3"></div>
 </div>
-
 {% endblock %}
 {% block script %}
 FusionCharts.ready(function(){
@@ -47,16 +46,32 @@ FusionCharts.ready(function(){
       var revenueChart = new FusionCharts({
         "type": "column2d",
         "renderAt": "chartContainer",
-        "width": "500",
-        "height": "300",
         "dataFormat": "json",
+        "width": 1200,
+        "height": 500,
         "dataSource": {
           "chart": {
-              "caption": "Monthly revenue for last year",
-              "subCaption": "Harry's SuperMart",
-              "xAxisName": "Month",
-              "yAxisName": "Revenues (In USD)",
-              "theme": "fint"
+              "caption": "Average Temperature of last 24 hours",
+              "xAxisName": "Hours from now",
+              "yAxisName": "Temperature (°C)",
+              "showlabels": "1",
+              "showalternatehgridcolor": "1",
+              "alternatehgridcolor": "ff5904",
+              "divlinecolor": "ff5904",
+              "divlinealpha": "20",
+              "alternatehgridalpha": "5",
+              "canvasbordercolor": "666666",
+              "canvasborderthickness": "1",
+              "basefontcolor": "666666",
+              "linecolor": "FF5904",
+              "linealpha": "85",
+              "showvalues": "1",
+              "rotatevalues": "1",
+              "valueposition": "auto",
+              "canvaspadding": "8",
+              "bgcolor": "ffffff",
+              "valuepadding": "5",
+              "showborder": "0"
            },
           "data": data
         }
