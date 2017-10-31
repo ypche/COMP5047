@@ -454,8 +454,8 @@ class History_HvalueView(generic.ListView):
                   count = 1
                   average_value = total_value / 10
                   json_data = {
-                     "id": hour,
-                     "Hvalue": average_value
+                    "label": str(hour),
+                    "value": str(round(average_value, 3)),
                   }
                   data.insert(0, json_data)
                   hour = hour + 1
@@ -487,7 +487,7 @@ class week_HvalueView(generic.ListView):
         total_value = 0
         day = 1
         total_val = 0
-        print("I am here1")
+
         for _ in weekdata:
             print("I am here2")
             total_val = total_val + _.Hvalue
@@ -498,8 +498,8 @@ class week_HvalueView(generic.ListView):
                 count = 1
                 average_value = total_value / 60
                 json_data = {
-                    "id": day,
-                    "Hvalue": average_value
+                    "label": str(day),
+                    "value": str(round(average_value, 3)),
                 }
                 data.insert(0, json_data)
                 day = day + 1
@@ -516,44 +516,6 @@ class week_HvalueView(generic.ListView):
             return Notification
 
 
-
-class week_HvalueView(generic.ListView):
-    template_name = "week_Hvalue.html"
-    context_object_name = "Notification"
-
-    def get_queryset(self):
-        weekdata = Seneor.objects.all().order_by('-time')[:420]
-        data = []
-        count = 1
-        average_value = 0
-        total_value = 0
-        day = 1
-        total_val = 0
-        for _ in weekdata:
-            total_val = total_val + _.Hvalue
-            if count % 60 != 0:
-                total_value = total_value + _.Hvalue
-                count = count + 1
-            else:
-                count = 1
-                average_value = total_value / 60
-                json_data = {
-                    "id": day,
-                    "Hvalue": average_value
-                }
-                data.insert(0, json_data)
-                day = day + 1
-                total_value = 0
-
-        with open('static/json/data.json', 'w') as outfile:
-            json.dump(data, outfile)
-
-        if total_val / 60 < 56:
-            Notification = "The humidity level in past 7 days was good for your skin. Enjoy your environment!"
-            return Notification
-        if total_val / 60 > 56:
-            Notification = "warning: The humidity level in past 7 days was too high. Higher levels to allow dust mites to grow on skin and trigger for skin allergy."
-            return Notification
 
 class week_TvalueView(generic.ListView):
     template_name = "week_Tvalue.html"
@@ -576,8 +538,8 @@ class week_TvalueView(generic.ListView):
                 count = 1
                 average_value = total_value / 60
                 json_data = {
-                    "id": day,
-                    "Tvalue": average_value
+                    "label": str(day),
+                    "value": str(round(average_value, 3)),
                 }
                 data.insert(0, json_data)
                 day = day + 1
