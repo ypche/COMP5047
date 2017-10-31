@@ -360,8 +360,8 @@ class History_TvalueView(generic.ListView):
                     print(total_value)
                     print("average:", average_value)
                     json_data = {
-                        "id": time_hour,
-                        "Tvalue": average_value
+                        "label": str(time_hour),
+                        "value": str(average_value)
                     }
                     print(average_value)
                     data.insert(0, json_data)
