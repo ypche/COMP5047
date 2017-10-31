@@ -361,7 +361,7 @@ class History_TvalueView(generic.ListView):
                     print("average:", average_value)
                     json_data = {
                         "label": str(time_hour),
-                        "value": str(average_value),
+                        "value": str(round(average_value, 3)),
                     }
                     print(average_value)
                     data.insert(0, json_data)

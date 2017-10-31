@@ -1,31 +1,13 @@
 {% extends 'base.html' %}
 {% block style %}
-    .bar{
-        fill: steelblue;
-    }
-
-    .bar:hover{
-        fill: brown;
-    }
-
-    .axis {
-        font: 10px sans-serif;
-    }
-
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-    }
 {% endblock %}
 
 {% block main %}
 <div class="row">
   <div class="col-md-4 mt-3 text-center">
-    <div class="btn-group" role="group" aria-label="...">
-      <a type="button" class="btn btn-default" href="{% url 'myhome:historyofTvalue' %}">Day</a>
-      <a type="button" class="btn btn-default" href="{% url 'myhome:week_Tvalue' %}">Week</a>
+    <div class="btn-group" role="group">
+      <a type="button" class="btn btn-outline-default" href="{% url 'myhome:historyofTvalue' %}">Day</a>
+      <a type="button" class="btn btn-outline-dark" href="{% url 'myhome:week_Tvalue' %}">Week</a>
     </div>
   </div>
   <div class="col-md-8 mt-3 text-center">
@@ -71,7 +53,7 @@ FusionCharts.ready(function(){
               "canvaspadding": "8",
               "bgcolor": "ffffff",
               "valuepadding": "5",
-              "showborder": "0"
+              "showborder": "0",
            },
           "data": data
         }
