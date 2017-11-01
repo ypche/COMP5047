@@ -217,10 +217,21 @@ class IndexView(TemplateView):
 #      ser.close()
 #
 #      return render(request, 'myhome.html', context)
+import requests
+
+def email_alert(first, second, third):
+    report = {}
+    report["value1"] = first
+    report["value2"] = second
+    report["value3"] = third
+    requests.post("https://maker.ifttt.com/trigger/test_email/with/key/dSdWZmpGBUOhqoBu3uZ9KR", data=report)
+
+
+from SkinHealth.tasks import test
 
 def ArdunioConnection(request):
     ser = serial.Serial("/dev/cu.usbmodem1411", baudrate=9600)
-
+    count = 0;
     while 1:
         arduinoData = ser.readline().decode('ascii')
         print(arduinoData)
@@ -232,6 +243,9 @@ def ArdunioConnection(request):
         print(Tvalue)
         print(Hvalue)
         print(Uvalue)
+        # if (count==0):
+        #     count = count + 1
+        #     email_alert("hello \n","Handsome ","Chao")
 
         data = Seneor.objects.create(Tvalue=Tvalue, Uvalue=Uvalue, Hvalue=Hvalue)
         data.save()
@@ -241,9 +255,11 @@ def ArdunioConnection(request):
             if (Hvalue <= 50):
                 context = {'Note': ' The indoor temperature and humidity is low, please open the humidifier!',
                            'data': data}
+                # email_alert("Dear client", " wanring", " the indoor temperature and humidity is low, please open the humidifier!")
             elif (Hvalue > 50):
                 context = {'Note': 'The indoor temperature is low, and the Humidity value is high, please open the heater!',
                            'data': data}
+            # email_alert("Dear client", " wanring", " the indoor temperature is low, and the Humidity value is high, please open the heater!")
 
         elif (Tvalue >15  and Tvalue <= 25):
 
@@ -251,6 +267,7 @@ def ArdunioConnection(request):
                 context = {
                     'Note': ' The indoor humidity is low, please open the humidifier!',
                     'data': data}
+                # email_alert("Dear client", " wanring", " the indoor humidity is low, please open the humidifier!")
             elif (Hvalue > 40 and Hvalue <= 60):
                 context = {
                     'Note': 'The indoor air quality is quite good now',
@@ -259,12 +276,16 @@ def ArdunioConnection(request):
                 context = {
                     'Note': 'The indoor temperature is proper, and the Humidity value is high, please open the heater!',
                     'data': data}
+                # email_alert("Dear client", " wanring", "the indoor temperature is proper, and the Humidity value is high, please open the heater!")
+
         else :
 
             if (Hvalue <= 40):
                 context = {
                     'Note': ' The indoor humidity is low,and temperature is quite high, please open the humidifier!',
                     'data': data}
+                # email_alert("Dear client", " wanring", " the indoor humidity is low,and temperature is quite high, please open the humidifier!")
+
             elif (Hvalue > 40 and Hvalue <= 60):
                 context = {
                     'Note': '',
@@ -273,11 +294,13 @@ def ArdunioConnection(request):
                 context = {
                     'HNote': 'The humidity level is too high. ',
                     'data': data}
+                # email_alert("Dear client", " wanring", " the humidity level is too high. ")
 
 
         break
 
     ser.close()
+    # test()
 
     return render(request, 'myhome.html', context)
 

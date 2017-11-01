@@ -29,7 +29,10 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+import djcelery
+djcelery.setup_loader()
+CELERY_ALWAYS_EAGER = True
+BROKER_URL = 'django://'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djcelery',
+    'kombu.transport.django',
     'myhome',
     'Data',
 ]
@@ -85,24 +90,23 @@ DATABASES = {
     #         'HOST': 'localhost',
     #         'PORT': '3306',
     #     }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'comp5047',
+        'USER': 'admin',
+        'PASSWORD': 'admin12345',
+        'HOST': 'comp5047.ckd2v5mn4wxe.ap-southeast-2.rds.amazonaws.com',
+        'PORT': '3306',
+    }
+#
 # 'default': {
 #             'ENGINE': 'django.db.backends.mysql',
-#             'NAME': 'elec5622',
+#             'NAME': 'elec5622sydney',
 #             'USER': 'root',
 #             'PASSWORD': 'admin123',
-#             'HOST': 'elec5622.cybstkdmoonr.us-east-2.rds.amazonaws.com',
+#             'HOST': 'elec5622sydney.cxfybvg2st2x.ap-southeast-2.rds.amazonaws.com',
 #             'PORT': '3306',
 #         }
-# }
-#
-'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'elec5622sydney',
-            'USER': 'root',
-            'PASSWORD': 'admin123',
-            'HOST': 'elec5622sydney.cxfybvg2st2x.ap-southeast-2.rds.amazonaws.com',
-            'PORT': '3306',
-        }
 }
 
 
