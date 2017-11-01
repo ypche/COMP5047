@@ -1,25 +1,12 @@
 {% extends 'base.html' %}
-{% block style %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block customcss %}
+
 {% endblock %}
 
 {% block main %}
-<!--header-->
-<!--banner-->
-	<div class="banner" style="background-color:#6CB6B6;"> </div>
-	<!---->
-	<div class="header">
-		<div class="header-top">
-            <br><br>
-			<div class="logo">
-				<h1><a href="index.html">IndoorAirQuality</a></h1>
-			</div>
-
-				<div class="clearfix"> </div>
-		</div>
-	</div>
-	<!--content-->
-
-        <br/>
 
 <form class="form-signin" role="form" method="post" action="{% url 'myhome:login' %}">
   {% csrf_token %}
@@ -40,9 +27,7 @@
   </div>
   <div class="row">
     <div class="col-md-3"></div>
-{#    <div class="col-md-3">#}
-{#      <span><a href="{% url 'password_reset' %}">Forget password？</a></span>#}
-{#    </div>#}
+    <div class="col-md-3"></div>
     <div class="col-md-3 text-right">
       <button class="btn btn-primary" type="submit">Sign in</button>
     </div>
@@ -60,44 +45,4 @@
     <div class="col-md-3"></div>
   </div>
 </form>
-
-
-<script>
-    {% block script %}{% endblock %}
-</script>
-
-	<!--footer-->
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-	<div class="footer">
-		<div class="container">
-					 <ul class="social-ic-icons">
-						<li class="twitter"><a href="#"><span> </span></a></li>
-						<li class="facebook"><a href="#"><span> </span></a></li>
-						<li class="gmail"><a href="#"><span> </span></a></li>
-					</ul>
-					<p class="footer-grid">Copyright &copy; 2017.Elec5622 Group4 All rights reserved.<a target="_blank" href="http://www.moobnn.com/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a> - Skin health<a href="http://www.moobnn.com/" target="_blank" title="模板在线">模板在线</a> <a href="http://guantaow.taobao.com" target="_blank">11</a></p>
-		 </div>
-	</div>
-
 {% endblock %}
-{#</body>#}
-{#</html>#}
